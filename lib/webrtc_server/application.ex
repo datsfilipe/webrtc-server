@@ -4,6 +4,7 @@ defmodule WebrtcServer.Application do
   @impl true
   def start(_type, _args) do
     children = [
+      WebrtcServer
     ]
 
     opts = [strategy: :rest_for_one, name: WebrtcServer.Supervisor]
