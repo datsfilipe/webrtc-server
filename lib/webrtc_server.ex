@@ -1,6 +1,7 @@
 defmodule WebrtcServer do
+  import WebrtcServer.Router
+
   require Record
-  
   Record.defrecord :httpd, Record.extract(:mod, from_lib: "inets/include/httpd.hrl")
 
   def child_spec(_) do
@@ -8,7 +9,7 @@ defmodule WebrtcServer do
       server_name: 'webrtc_server',
       server_root: '/tmp',
       document_root: '/tmp',
-      port: 8080,
+      port: 3000,
       modules: [__MODULE__]
     ]
 
@@ -21,16 +22,7 @@ defmodule WebrtcServer do
   end
 
   def unquote(:do)(data) do
-    uri = httpd(data, :request_uri)
-    IO.puts("uri: #{uri}")
-
-    response =
-      case httpd(data, :request_uri) do
-        '/' ->
-          {200, 'OK'}
-        _ ->
-          {404, 'Not Found'}
-      end
-    {:proceed, [response: response]}
+    {status, body} = match(httpd(data, :request_uri))
+    {:proceed, [response: {status, body}]}
   end
 end
