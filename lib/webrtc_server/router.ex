@@ -1,6 +1,7 @@
 defmodule WebrtcServer.Router do
   use Plug.Router
 
+  plug(Utils.HotReload)
   plug(Plug.Logger)
   plug :match
   plug(Plug.Parsers, parsers: [:json], json_decoder: Jason)
