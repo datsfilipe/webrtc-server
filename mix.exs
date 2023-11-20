@@ -13,13 +13,16 @@ defmodule WebrtcServer.MixProject do
 
   def application do
     [
-      extra_applications: [:logger, :inets],
+      extra_applications: [:logger, :plug_cowboy],
       mod: {WebrtcServer.Application, []}
     ]
   end
 
   defp deps do
     [
+      {:cowboy, "~> 2.10"},
+      {:plug, "~> 1.15.1"},
+      {:plug_cowboy, "~> 2.0"},
       {:jason, "~> 1.4"}
     ]
   end
