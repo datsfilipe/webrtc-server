@@ -7,11 +7,23 @@ defmodule WebrtcServer.Application do
       Plug.Cowboy.child_spec(
         scheme: :http,
         plug: WebrtcServer.Router,
-        options: [port: Application.get_env(:webrtc_server, :port)]
+        options: [
+          port: Application.get_env(:webrtc_server, :port),
+          dispatch: dispatch()
+        ]
       )
     ]
 
     opts = [strategy: :one_for_one, name: WebrtcServer.Supervisor]
     Supervisor.start_link(children, opts)
+  end
+    
+  defp dispatch do
+    [
+      {:_, [
+        {"/ws", WebrtcServer.SocketHandler, []},
+        {:_, Plug.Cowboy.Handler, {WebrtcServer.Router, []}}
+      ]}
+    ]
   end
 end
