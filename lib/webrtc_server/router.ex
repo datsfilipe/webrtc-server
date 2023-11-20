@@ -1,18 +1,16 @@
 defmodule WebrtcServer.Router do
-  import Jason
+  use Plug.Router
 
-  def encode_data(data) do
-    data
-    |> encode!()
-    |> String.to_charlist()
+  plug(Plug.Logger)
+  plug :match
+  plug(Plug.Parsers, parsers: [:json], json_decoder: Jason)
+  plug :dispatch
+
+  get "/" do
+    send_resp(conn, 200, "Hello, world!")
   end
 
-  def match(uri) do
-    case uri do
-      '/' ->
-        {200, encode_data(%{"message" => "Hello World"})}
-      _ ->
-        {404, encode_data("Not Found")}
-    end
+  match _ do
+    send_resp(conn, 404, "oops")
   end
 end
