@@ -1,15 +1,20 @@
-defmodule WebrtcServerTest do
-  use ExUnit.Case
-
-  test "child_spec/1" do
-    # not gonna test now
-  end
+defmodule WebrtcServerTest.Router do
+  use ExUnit.Case, async: true
+  use Plug.Test
 
   test "handle request '/'" do
-    # not gonna test now
+    conn = conn(:get, "/")
+      |> WebrtcServer.Router.call([])
+    assert conn.state == :sent
+    assert conn.status == 200
+    assert conn.resp_body == "Hello, world!"
   end
 
-  test "handle request not matching '/'" do
-    # not gonna test now
+  test "handle request '/foo'" do
+    conn = conn(:get, "/foo")
+      |> WebrtcServer.Router.call([])
+    assert conn.state == :sent
+    assert conn.status == 404
+    assert conn.resp_body == "oops"
   end
 end
