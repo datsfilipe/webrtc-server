@@ -4,10 +4,14 @@ defmodule WebrtcServer.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      WebrtcServer
+      Plug.Cowboy.child_spec(
+        scheme: :http,
+        plug: WebrtcServer.Router,
+        options: [port: Application.get_env(:webrtc_server, :port)]
+      )
     ]
 
-    opts = [strategy: :rest_for_one, name: WebrtcServer.Supervisor]
+    opts = [strategy: :one_for_one, name: WebrtcServer.Supervisor]
     Supervisor.start_link(children, opts)
   end
 end
