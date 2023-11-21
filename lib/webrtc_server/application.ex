@@ -1,8 +1,11 @@
 defmodule WebrtcServer.Application do
+  alias WebrtcServer.Store
   use Application
 
   @impl true
   def start(_type, _args) do
+    Store.init()
+
     children = [
       Plug.Cowboy.child_spec(
         scheme: :http,
@@ -25,5 +28,11 @@ defmodule WebrtcServer.Application do
         {:_, Plug.Cowboy.Handler, {WebrtcServer.Router, []}}
       ]}
     ]
+  end
+
+  @impl true
+  def stop(_state) do
+    Store.terminate()
+    :ok
   end
 end
