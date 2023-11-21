@@ -13,7 +13,7 @@ defmodule WebrtcServer.MixProject do
 
   def application do
     [
-      extra_applications: [:logger, :plug_cowboy],
+      extra_applications: [:logger, :plug_cowboy, :crypto],
       mod: {WebrtcServer.Application, []}
     ]
   end
@@ -23,7 +23,8 @@ defmodule WebrtcServer.MixProject do
       {:cowboy, "~> 2.10"},
       {:plug, "~> 1.15.1"},
       {:plug_cowboy, "~> 2.0"},
-      {:jason, "~> 1.4"}
+      {:jason, "~> 1.4"},
+      {:uuid, "~> 1.1"}
     ]
   end
 end
